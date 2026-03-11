@@ -1170,4 +1170,20 @@ img {
     .sp-br {
         display: block !important;
     }
+
+    .chat-input-area {
+        padding: 15px 10px;
+        gap: 8px;
+    }
+
+    #chatInput {
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+
+    #chatSendBtn {
+        padding: 0 20px;
+        margin-left: 0;
+        white-space: nowrap;
+    }
 }
