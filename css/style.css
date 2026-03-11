@@ -1171,25 +1171,31 @@ img {
         display: block !important;
     }
 
+    .chat-container {
+        width: 100%;
+    }
+
     .chat-input-area {
-        padding: 15px 10px;
-        gap: 8px;
+        padding: 10px;
+        gap: 5px;
+        width: 100%;
         box-sizing: border-box;
     }
 
     #chatInput {
-        padding: 12px 15px;
-        font-size: 15px;
-        flex: 1 1 auto;
-        min-width: 0;
-        /* flex要素の最小幅制限を解除してはみ出しを防止 */
+        padding: 10px 12px;
+        font-size: 14px;
+        flex: 1;
+        width: 100%;
+        min-width: 100px;
+        box-sizing: border-box;
     }
 
     #chatSendBtn {
-        padding: 0 15px;
+        padding: 10px 15px;
         margin-left: 0;
+        font-size: 14px;
         white-space: nowrap;
-        flex: 0 0 auto;
-        /* ボタンは縮小させない */
+        flex: none;
     }
 }
