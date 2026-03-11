@@ -130,7 +130,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const loadingId = appendLoadingIndicator();
 
         try {
-            const responseText = await fetchGroqResponse(conversationHistory);
+            // 最低1.5秒はアニメーションを見せるための待機処理を追加
+            const minimumDelay = new Promise(resolve => setTimeout(resolve, 1500));
+            const apiRequest = fetchGroqResponse(conversationHistory);
+
+            const [responseText] = await Promise.all([apiRequest, minimumDelay]);
 
             // ローディングを消して、AIの回答を表示
             removeLoadingIndicator(loadingId);
@@ -161,14 +165,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
-        // 改行を<br>に変換
-        contentDiv.innerHTML = text.replace(/\n/g, '<br>');
 
         messageDiv.appendChild(contentDiv);
         chatHistory.appendChild(messageDiv);
-
-        // 最新のメッセージまでスクロール
         chatHistory.scrollTop = chatHistory.scrollHeight;
+
+        // ボットの返信のみタイプライター風に1文字ずつ表示
+        if (sender === 'bot') {
+            let index = 0;
+            const speed = 30; // 1文字あたりの表示速度（ミリ秒）
+            // 改行タグを保持したまま1文字ずつ処理するために、一旦テキストとして分割する
+            const chars = text.split('');
+
+            function typeWriter() {
+                if (index < chars.length) {
+                    // 改行文字の場合は<br>タグに変換
+                    if (chars[index] === '\n') {
+                        contentDiv.innerHTML += '<br>';
+                    } else {
+                        contentDiv.innerHTML += chars[index];
+                    }
+                    index++;
+                    chatHistory.scrollTop = chatHistory.scrollHeight; // スクロール追従
+                    setTimeout(typeWriter, speed);
+                }
+            }
+            typeWriter();
+        } else {
+            // ユーザーの入力は即座に表示（改行込み）
+            contentDiv.innerHTML = text.replace(/\n/g, '<br>');
+        }
     }
 
     function appendLoadingIndicator() {
@@ -179,7 +205,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
-        contentDiv.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+        contentDiv.innerHTML = `
+            <div class="kyudo-loader">
+                <div class="loader-arrow-fly"></div>
+                <div class="loader-target-kasumi"></div>
+                <div class="loader-sparks"></div>
+            </div>
+        `;
 
         messageDiv.appendChild(contentDiv);
         chatHistory.appendChild(messageDiv);
