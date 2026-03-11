@@ -179,12 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
-        contentDiv.innerHTML = `
-            <div class="kyudo-loader">
-                <div class="loader-arrow-fly"></div>
-                <div class="loader-target-kasumi"></div>
-            </div>
-        `;
+        contentDiv.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
 
         messageDiv.appendChild(contentDiv);
         chatHistory.appendChild(messageDiv);

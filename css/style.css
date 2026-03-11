@@ -44,29 +44,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* 背景の弓シルエット装飾 */
-.bg-silhouette {
-    position: fixed;
-    bottom: -5vh;
-    right: -5vw;
-    width: 65vw;
-    max-width: 900px;
-    opacity: 0.05;
-    z-index: -1;
-    pointer-events: none;
-    mix-blend-mode: multiply;
-    /* 白背景を透過し黒い影だけ残す */
-}
-
-@media (max-width: 768px) {
-    .bg-silhouette {
-        width: 100vw;
-        bottom: 5vh;
-        right: -10vw;
-        opacity: 0.04;
-    }
-}
-
 h1,
 h2,
 h3,
@@ -144,36 +121,12 @@ img {
 .section-jp::after {
     content: '';
     position: absolute;
-    bottom: -1px;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 0;
-    height: 2px;
+    width: 40px;
+    height: 1px;
     background-color: var(--primary-color);
-    transition: width 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
-}
-
-.section-jp::before {
-    content: '';
-    position: absolute;
-    bottom: -5.5px;
-    left: 50%;
-    width: 10px;
-    height: 10px;
-    border-top: 2px solid var(--primary-color);
-    border-right: 2px solid var(--primary-color);
-    transform: rotate(45deg);
-    opacity: 0;
-    transition: left 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s, opacity 0.3s ease 0.3s;
-}
-
-.fade-up.visible .section-jp::after {
-    width: 80px;
-}
-
-.fade-up.visible .section-jp::before {
-    left: calc(50% + 30px);
-    opacity: 1;
 }
 
 /* =========================================
@@ -966,81 +919,40 @@ img {
     border-bottom-right-radius: 4px;
 }
 
-/* ローディング時の弓道アニメーション（霞的と矢） */
+/* ローディング時のアニメーション */
 .bot.loading .message-content {
     display: flex;
+    gap: 5px;
     align-items: center;
-    padding: 10px 20px;
-    background-color: #ffffff;
+    padding: 15px 25px;
 }
 
-.kyudo-loader {
-    position: relative;
-    width: 70px;
-    height: 30px;
-}
-
-.loader-target-kasumi {
-    position: absolute;
-    right: 0;
-    top: 3px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    /* 霞的（かすみまと）: 白黒の同心円 */
-    background: radial-gradient(circle, #fff 15%, #000 15%, #000 35%, #fff 35%, #fff 55%, #000 55%, #000 75%, #fff 75%, #fff 100%);
-    border: 1px solid #000;
-    z-index: 2;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.loader-arrow-fly {
-    position: absolute;
-    top: 14px;
-    width: 25px;
-    height: 2px;
-    background-color: var(--primary-color);
-    z-index: 1;
-    animation: flyIntoTarget 1.5s infinite ease-in;
-}
-
-.loader-arrow-fly::after {
-    content: '';
-    position: absolute;
-    right: -2px;
-    top: -4px;
+.dot {
     width: 8px;
     height: 8px;
-    border-top: 2px solid var(--primary-color);
-    border-right: 2px solid var(--primary-color);
-    transform: rotate(45deg);
+    background-color: #ccc;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
 }
 
-@keyframes flyIntoTarget {
-    0% {
-        left: -20px;
-        opacity: 0;
-    }
+.dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
 
-    20% {
-        opacity: 1;
-        left: 5px;
-    }
+.dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
 
-    50% {
-        opacity: 1;
-        left: 40px;
-    }
+@keyframes bounce {
 
-    /* 的に刺さる */
-    80% {
-        opacity: 1;
-        left: 40px;
-    }
-
+    0%,
+    80%,
     100% {
-        opacity: 0;
-        left: 40px;
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1);
     }
 }
 
@@ -1078,45 +990,10 @@ img {
     font-weight: bold;
     cursor: pointer;
     transition: var(--transition-fast);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    overflow: hidden;
-}
-
-.send-arrow-icon {
-    display: inline-block;
 }
 
 #chatSendBtn:hover:not(:disabled) {
     background-color: var(--primary-light);
-}
-
-#chatSendBtn:hover:not(:disabled) .send-arrow-icon {
-    animation: shootBtnArrow 0.4s ease forwards;
-}
-
-@keyframes shootBtnArrow {
-    0% {
-        transform: translateX(0);
-        opacity: 1;
-    }
-
-    40% {
-        transform: translateX(25px);
-        opacity: 0;
-    }
-
-    41% {
-        transform: translateX(-25px);
-        opacity: 0;
-    }
-
-    100% {
-        transform: translateX(0);
-        opacity: 1;
-    }
 }
 
 #chatSendBtn:disabled {
