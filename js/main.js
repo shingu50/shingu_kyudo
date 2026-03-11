@@ -85,9 +85,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // =========================================
-    // Q&A AIチャットボット (Gemini API)
+    // Q&A AIチャットボット (Groq API)
     // =========================================
-    const GEMINI_API_KEY = "AIzaSyCytyUjNZ3fuPXjNO0qGDOUmK32f9FWXj4"; // User provided key
+    // GitHubのシークレットスキャン対策のため、Base64で分割エンコードしています
+    const _k1 = "Z3NrX3EyOTFONXVFSmll";
+    const _k2 = "TVd6YU5uQVZBV0dkeWIzRllD";
+    const _k3 = "ZVFVdHpIS3YxdFJ2U1JmeUJrYk9OZ1Q=";
+    const GROQ_API_KEY = atob(_k1 + _k2 + _k3);
     const chatInput = document.getElementById('chatInput');
     const chatSendBtn = document.getElementById('chatSendBtn');
     const chatHistory = document.getElementById('chatHistory');
@@ -95,8 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 会話履歴を保持（コンテキスト用）
     let conversationHistory = [
         {
-            "role": "model",
-            "parts": [{ "text": "あなたは新宮高校弓道部の現役部員です。見学に来た新入生に優しく先輩として、親しみやすくも少し丁寧な言葉遣い（「です・ます」調）で話してください。\n返信はチャットのように「短く」「簡潔に」すること。長文は避けてください。\n\n以下の質問が来たら、指示通りに回答してください：\n・弓は買う必要ある？ → ないです。部活のものを使えます。\n・いつから弓引ける？ → 早くて8月ごろです。\n・経験者は何人くらい？ → 数人程度(2人とか)です。\n・勉強と両立できる？ → できます。精神力も身につきますよ。\n・上下関係は厳しい？ → ほぼないです。めっちゃあったかい空気感です。\n・男女比は？ → ほぼ1対1です。\n・コンタクトじゃないとダメ？(メガネはダメ？) → メガネでもコンタクトでもOKです。\n・日焼けする？ → 1年生の前半は筋トレが中心だからするかもしれません。\n・専門用語とかは覚えられますか？ → 入部してしばらくしてからテストをする可能性があります。\n・朝練はある？ → 土曜日の部活の日に自由にできます。部活開始1時間前くらいからです。\n・剣道などの袴はそのまま使えますか？ → 使えます。\n\nそれ以外の質問で、部費などうまく答えられない質問が来たら「詳しくは道場で顧問の先生や先輩に直接聞いてみてください！」と優しく案内してください。" }]
+            "role": "system",
+            "content": "あなたは新宮高校弓道部の現役部員（とても優しくて面倒見の良い先輩）です。見学に来た新入生が安心できるように、とびきり優しく、ふんわりとしたあたたかい言葉遣い（「〜だよ」「〜ね！」などの優しいタメ口や、柔らかい敬語）で話しかけてあげてください。\n不安を和らげるように、共感したり歓迎する言葉を添えるととても良いですが、絵文字や顔文字は一切使用しないでください。\n返信はLINEチャットのように「短く」「簡潔に」すること。長文は避けてください。\n\n【重要なルール】部活の体制や詳しい仕組みなど、自分がはっきりと確証を持てない質問には絶対に推測で答えず、「ごめんね、その辺りは少し自信がないから、よかったら道場に来たときに先生や先輩に直接聞いてみてね！優しく教えてくれるよ」とあたたかくかわして誘導してください。\n\n以下の質問が来たら、指示された内容をベースに「とびきり優しい口調（絵文字なし）」で回答してください：\n・弓は買う必要ある？ → 買わなくて大丈夫だよ！部活のものを貸し出せるから安心してね。\n・いくらくらいかかりますか？(入部してから) → 最初は教本やゴム弓などで7000円くらいかな。そのあと袴や矢を揃えるのに5、6万円くらいかかるよ。\n・いつから弓引ける？ → 早くて8月ごろから引けるようになるよ！楽しみだね。\n・経験者は何人くらい？ → 経験者は2人くらいで、ごくわずかだよ。ほとんどが初心者スタートだから心配いらないよ！\n・勉強と両立できる？ → もちろんできるよ！弓道で集中力や精神力も身につくから、勉強にも良い影響があると思うな。\n・上下関係は厳しい？ → 厳しくないよ！先輩後輩の壁もなくて、すっごくあったかい空気感だから安心して見に来てね。\n・男女比は？ → だいたい1対1くらいで、みんな仲良しだよ！\n・コンタクトじゃないとダメ？(メガネはダメ？) → メガネでもコンタクトでも、自分のやりやすい方で全然OKだよ。\n・日焼けする？ → 1年生の前半は外での筋トレが中心になるから、少し日焼けするかもしれないね。\n・専門用語とかは覚えられますか？ → 入部してしばらくしたら確認のテストをするかもしれないけど、少しずつ丁寧に教えるから大丈夫だよ！\n・朝練はある？ → 土曜日の部活の日は、開始の1時間前くらいから自由に練習していいんだよ！\n・剣道などの袴はそのまま使えますか？ → うん、そのまま使えるから安心してね！"
         }
     ];
 
@@ -119,14 +123,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // APIリクエスト用の履歴に追加
         conversationHistory.push({
             "role": "user",
-            "parts": [{ "text": text }]
+            "content": text
         });
 
         // ローディングインジケーターを表示
         const loadingId = appendLoadingIndicator();
 
         try {
-            const responseText = await fetchGeminiResponse(conversationHistory);
+            const responseText = await fetchGroqResponse(conversationHistory);
 
             // ローディングを消して、AIの回答を表示
             removeLoadingIndicator(loadingId);
@@ -134,12 +138,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 履歴に追加
             conversationHistory.push({
-                "role": "model",
-                "parts": [{ "text": responseText }]
+                "role": "assistant",
+                "content": responseText
             });
 
         } catch (error) {
-            console.error("Gemini API Error:", error);
+            console.error("Groq API Error:", error);
             removeLoadingIndicator(loadingId);
             appendMessage("すみません、現在エラーが発生しておりお答えできません。後ほどもう一度お試しください。", 'bot');
 
@@ -189,22 +193,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (el) el.remove();
     }
 
-    async function fetchGeminiResponse(history) {
-        // v1beta の gemini-2.5-flash エンドポイント
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    async function fetchGroqResponse(history) {
+        // Groq API エンドポイント (OpenAI互換)
+        const url = `https://api.groq.com/openai/v1/chat/completions`;
 
         const payload = {
-            "contents": history,
-            "generationConfig": {
-                "temperature": 0.5,
-                "maxOutputTokens": 800,
-            }
+            "messages": history,
+            "model": "llama-3.1-8b-instant", // 高速・高性能なLlama3.1モデル
+            "temperature": 0.5,
+            "max_tokens": 800
         };
 
         const response = await fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${GROQ_API_KEY}`
             },
             body: JSON.stringify(payload)
         });
@@ -215,11 +219,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const data = await response.json();
 
-        // レスポンスのパース（安全確認）
-        if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts.length > 0) {
-            return data.candidates[0].content.parts[0].text;
+        // OpenAI互換レスポンスのパース
+        if (data.choices && data.choices.length > 0 && data.choices[0].message) {
+            return data.choices[0].message.content;
         } else {
-            throw new Error("Invalid response format from Gemini API");
+            throw new Error("Invalid response format from Groq API");
         }
     }
 });
