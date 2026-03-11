@@ -1174,16 +1174,22 @@ img {
     .chat-input-area {
         padding: 15px 10px;
         gap: 8px;
+        box-sizing: border-box;
     }
 
     #chatInput {
         padding: 12px 15px;
         font-size: 15px;
+        flex: 1 1 auto;
+        min-width: 0;
+        /* flex要素の最小幅制限を解除してはみ出しを防止 */
     }
 
     #chatSendBtn {
-        padding: 0 20px;
+        padding: 0 15px;
         margin-left: 0;
         white-space: nowrap;
+        flex: 0 0 auto;
+        /* ボタンは縮小させない */
     }
 }
